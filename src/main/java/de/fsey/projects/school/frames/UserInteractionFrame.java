@@ -1,11 +1,15 @@
 package de.fsey.projects.school.frames;
 
-import de.fsey.projects.school.frames.calc.Calculations;
+import de.fsey.projects.school.calc.Calculations;
+import de.fsey.projects.school.graphic.DisplayThrowInDiagram;
+import de.fsey.projects.school.pojo.ThrowPOJO;
 
 import javax.swing.*;
 
 
-import java.awt.GridLayout;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.List;
 
 public class UserInteractionFrame {
 
@@ -14,7 +18,10 @@ public class UserInteractionFrame {
     }
 
 
-
+    /**
+     * Method creates a window to input all data of a throw. If submit button is clicked,
+     * the type of throw is determined and calculated.
+     */
     public static void openProgram() {
 
         //create frame, panel and layout
@@ -50,10 +57,26 @@ public class UserInteractionFrame {
 
         //button clicked
         submitButton.addActionListener(e -> {
+
+            ThrowPOJO throwPOJO = new ThrowPOJO(Double.parseDouble((angle.getText())), Double.parseDouble(startVelocity.getText()), Double.parseDouble(height.getText()));
             Calculations calc = new Calculations();
+            DisplayThrowInDiagram displayThrowInDiagram;
+
+            try {
+                throwPOJO = calc.determineTypeOfThrow(throwPOJO);
+                List<Point2D.Double> pointList = calc.getPointsOfGraph(throwPOJO.getQuadraticThrowEquations(), throwPOJO.getLinearGraphOfForVerticalThrowsX(), throwPOJO);
 
 
-            calc.start(Double.parseDouble((angle.getText())), Double.parseDouble(startVelocity.getText()), Double.parseDouble(height.getText()));
+
+                displayThrowInDiagram = new DisplayThrowInDiagram();
+                displayThrowInDiagram.createAndShowGui(pointList);
+
+
+            }catch (NumberFormatException exception){
+                System.out.printf("Error occurred: %s", exception);
+            }
+
+
         });
 
     }
