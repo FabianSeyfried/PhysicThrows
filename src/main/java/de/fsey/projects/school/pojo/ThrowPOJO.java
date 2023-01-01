@@ -1,6 +1,7 @@
 package de.fsey.projects.school.pojo;
 
 import java.util.AbstractMap;
+import java.util.Arrays;
 
 /**
  * The params angleInDegrees, startVelocity, and height are pre-filled by the user.
@@ -79,6 +80,18 @@ public class ThrowPOJO {
     }
     public void setEquationPartsABC(double[] equationPartsABC) {
         this.equationPartsABC = equationPartsABC;
+    }
+
+    @Override
+    public String toString() {
+        return "ThrowPOJO{" +
+                "angleInDegrees=" + angleInDegrees +
+                ", startVelocity=" + startVelocity +
+                ", height=" + height +
+                ", equationPartsABC=" + Arrays.toString(equationPartsABC) +
+                ", timeOfThrow=" + timeOfThrow +
+                ", distanceOfThrow=" + distanceOfThrow +
+                '}';
     }
 }
 

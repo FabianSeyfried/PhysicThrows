@@ -1,11 +1,8 @@
 package de.fsey.projects.school.calc;
 
 import de.fsey.projects.school.pojo.ThrowPOJO;
-
 import java.awt.geom.Point2D;
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Calculations {
@@ -19,11 +16,11 @@ public class Calculations {
 
         // senkrechter wurf -- freier fall? -> winkel spielt keine rolle wenn v0 = 0
         if (throwPOJO.getStartVelocity() == 0 || throwPOJO.getAngleInDegrees() == 90 || throwPOJO.getAngleInDegrees() == 270) {
-            verticalThrowCalculations(throwPOJO);
+            throwPOJO = verticalThrowCalculations(throwPOJO);
         }
         // waagrechter wurf
         else if (throwPOJO.getStartVelocity() > 0 && throwPOJO.getAngleInDegrees() == 0 || throwPOJO.getAngleInDegrees() == 180) {
-            horizontalThrowCalculations(throwPOJO);
+            throwPOJO = horizontalThrowCalculations(throwPOJO);
         }
 
         //schräger wurf
@@ -38,7 +35,7 @@ public class Calculations {
                 if (throwPOJO.getAngleInDegrees() > 360)
                     while (throwPOJO.getAngleInDegrees() > 360)
                         throwPOJO.setAngleInDegrees(throwPOJO.getAngleInDegrees() - 360);
-                ObliqueThrowCalculations(throwPOJO);
+               throwPOJO = ObliqueThrowCalculations(throwPOJO);
             }
         }
 
@@ -83,6 +80,7 @@ public class Calculations {
         throwPOJO.setDistanceOfThrow(distanceOfThrow);
         throwPOJO.setEquationPartsABC(new double[]{railCurveEquationA, railCurveEquationB, railCurveEquationC});
 
+        System.out.println(throwPOJO.toString());
         return throwPOJO;
 
     }
@@ -132,7 +130,6 @@ public class Calculations {
      * @return
      */
     public List<Point2D.Double> getPointsOfGraph(ThrowPOJO throwPOJO) {
-        //contains bug oblique
         List<Point2D.Double> points = new ArrayList<>();
         double x = 0;
         double y;

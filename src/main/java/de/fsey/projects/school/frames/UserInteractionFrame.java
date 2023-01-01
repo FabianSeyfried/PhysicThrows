@@ -3,10 +3,7 @@ package de.fsey.projects.school.frames;
 import de.fsey.projects.school.calc.Calculations;
 import de.fsey.projects.school.graphic.DisplayThrowInDiagram;
 import de.fsey.projects.school.pojo.ThrowPOJO;
-
 import javax.swing.*;
-
-
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -69,7 +66,7 @@ public class UserInteractionFrame {
 
 
                 displayThrowInDiagram = new DisplayThrowInDiagram();
-                displayThrowInDiagram.createAndShowGui(pointList);
+                displayThrowInDiagram.createAndShowGui(pointList, throwPOJO);
 
 
             }catch (NumberFormatException exception){
