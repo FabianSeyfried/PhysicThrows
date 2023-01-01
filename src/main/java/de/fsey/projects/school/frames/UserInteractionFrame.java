@@ -64,7 +64,7 @@ public class UserInteractionFrame {
 
             try {
                 throwPOJO = calc.determineTypeOfThrow(throwPOJO);
-                List<Point2D.Double> pointList = calc.getPointsOfGraph(throwPOJO.getQuadraticThrowEquations(), throwPOJO.getLinearGraphOfForVerticalThrowsX(), throwPOJO);
+                List<Point2D.Double> pointList = calc.getPointsOfGraph(throwPOJO);
 
 
 

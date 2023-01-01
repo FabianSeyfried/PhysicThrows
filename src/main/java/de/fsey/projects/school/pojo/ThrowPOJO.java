@@ -15,9 +15,7 @@ public class ThrowPOJO {
     private double startVelocity;
     private double height;
 
-    private AbstractMap.SimpleEntry<Double , Double> quadraticThrowEquations;
-
-    private double linearGraphOfForVerticalThrowsX;
+    private double[] equationPartsABC = new double[3];
     private double timeOfThrow;
     private double distanceOfThrow;
 
@@ -25,12 +23,11 @@ public class ThrowPOJO {
     public ThrowPOJO() {
     }
 
-    public ThrowPOJO(double angleInDegrees, double startVelocity, double height, AbstractMap.SimpleEntry<Double, Double> quadraticThrowEquations, double linearGraphOfForVerticalThrowsX, double timeOfThrow, double distanceOfThrow) {
+    public ThrowPOJO(double angleInDegrees, double startVelocity, double height, double[] equationPartsABC, double timeOfThrow, double distanceOfThrow) {
         this.angleInDegrees = angleInDegrees;
         this.startVelocity = startVelocity;
         this.height = height;
-        this.quadraticThrowEquations = quadraticThrowEquations;
-        this.linearGraphOfForVerticalThrowsX = linearGraphOfForVerticalThrowsX;
+        this.equationPartsABC = equationPartsABC;
         this.timeOfThrow = timeOfThrow;
         this.distanceOfThrow = distanceOfThrow;
     }
@@ -76,17 +73,12 @@ public class ThrowPOJO {
         this.distanceOfThrow = distanceOfThrow;
     }
 
-    public AbstractMap.SimpleEntry<Double, Double> getQuadraticThrowEquations() {
-        return quadraticThrowEquations;
-    }
-    public void setQuadraticThrowEquations(AbstractMap.SimpleEntry<Double, Double> quadraticThrowEquations) {
-        this.quadraticThrowEquations = quadraticThrowEquations;
-    }
 
-    public double getLinearGraphOfForVerticalThrowsX() {
-        return linearGraphOfForVerticalThrowsX;
+    public double[] getEquationPartsABC() {
+        return equationPartsABC;
     }
-    public void setLinearGraphOfForVerticalThrowsX(double linearGraphOfForVerticalThrowsX) {
-        this.linearGraphOfForVerticalThrowsX = linearGraphOfForVerticalThrowsX;
+    public void setEquationPartsABC(double[] equationPartsABC) {
+        this.equationPartsABC = equationPartsABC;
     }
 }
+

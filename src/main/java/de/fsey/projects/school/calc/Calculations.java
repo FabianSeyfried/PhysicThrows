@@ -5,8 +5,8 @@ import de.fsey.projects.school.pojo.ThrowPOJO;
 import java.awt.geom.Point2D;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class Calculations {
 
@@ -48,30 +48,48 @@ public class Calculations {
 
 
     public ThrowPOJO horizontalThrowCalculations(ThrowPOJO throwPOJO) {
+        System.out.println("horizontal");
 
         double timeOfThrow = Math.sqrt((2 * throwPOJO.getHeight()) / GRAVITY_CONSTANT);
         double distanceOfThrow = throwPOJO.getStartVelocity() * (Math.sqrt((2 * throwPOJO.getHeight()) / GRAVITY_CONSTANT));
-        double railCurveGradient = -0.5 * (GRAVITY_CONSTANT / (Math.pow(throwPOJO.getStartVelocity(), 2)));
-        double railCurveYAxis = throwPOJO.getHeight();
+
+        double railCurveEquationA = -0.5 * (GRAVITY_CONSTANT / (Math.pow(throwPOJO.getStartVelocity(), 2)));
+        double railCurveEquationC = throwPOJO.getHeight();
 
 
         throwPOJO.setTimeOfThrow(timeOfThrow);
         throwPOJO.setDistanceOfThrow(distanceOfThrow);
-        // contains all parts of quadratic equation
-        AbstractMap.SimpleEntry<Double, Double> entry = new AbstractMap.SimpleEntry<>(Map.entry(railCurveGradient, railCurveYAxis));
-        throwPOJO.setQuadraticThrowEquations(entry);
+        throwPOJO.setEquationPartsABC(new double[]{railCurveEquationA, 0.0, railCurveEquationC});
 
         return throwPOJO;
 
     }
 
     public ThrowPOJO ObliqueThrowCalculations(ThrowPOJO throwPOJO) {
+        System.out.println("oblique");
+        double angleInRadians = Math.toRadians(throwPOJO.getAngleInDegrees());
+
+        double timeOfThrow = ((throwPOJO.getStartVelocity() * Math.sin(angleInRadians)) / GRAVITY_CONSTANT) +
+                ((Math.sqrt(Math.pow(throwPOJO.getStartVelocity() * Math.sin(angleInRadians), 2) + 2 * GRAVITY_CONSTANT * throwPOJO.getHeight())) / GRAVITY_CONSTANT);
+
+        double distanceOfThrow = (throwPOJO.getStartVelocity() * Math.cos(angleInRadians)) * timeOfThrow;
+
+        double railCurveEquationA = -0.5 * GRAVITY_CONSTANT / Math.pow(throwPOJO.getStartVelocity() * Math.cos(angleInRadians), 2);
+        double railCurveEquationB = Math.ceil(Math.tan(angleInRadians));
+        double railCurveEquationC = throwPOJO.getHeight();
+
+
+        throwPOJO.setTimeOfThrow(timeOfThrow);
+        throwPOJO.setDistanceOfThrow(distanceOfThrow);
+        throwPOJO.setEquationPartsABC(new double[]{railCurveEquationA, railCurveEquationB, railCurveEquationC});
 
         return throwPOJO;
 
     }
 
     public ThrowPOJO verticalThrowCalculations(ThrowPOJO throwPOJO) {
+        System.out.println("vertical");
+        //TODO: program behavior here
 //        double timeOfThrow = 0;
 //        double distanceOfThrow = 0;
 //        double railCurveX = 0;
@@ -108,37 +126,29 @@ public class Calculations {
 
 
     /**
-     * Method checks if the railCurve is quadratic or linear. Then proceeds to get the quadratic equation from pojo and calculates some points of the graph.
-     * Points are then saved into the list of points. In case of a linear graph, only the highest and lowest points are saved into the list.
+     * Method extracts parts of equation and determines the points of the graph by setting x into the equation until the y-values are 0.
      *
-     * @param quadraticEquation
-     * @param linearGraphX
      * @param throwPOJO
      * @return
      */
-    public List<Point2D.Double> getPointsOfGraph(AbstractMap.SimpleEntry<Double, Double> quadraticEquation, double linearGraphX, ThrowPOJO throwPOJO) {
-
+    public List<Point2D.Double> getPointsOfGraph(ThrowPOJO throwPOJO) {
+        //contains bug oblique
         List<Point2D.Double> points = new ArrayList<>();
         double x = 0;
         double y;
 
-        if (quadraticEquation != null) {
-            double railCurveGradient = quadraticEquation.getKey();
-            double railCurveYAxis = quadraticEquation.getValue();
+        if (throwPOJO.getEquationPartsABC() != null) {
+            double a = throwPOJO.getEquationPartsABC()[0];
+            double b = throwPOJO.getEquationPartsABC()[1];
+            double c = throwPOJO.getEquationPartsABC()[2];
 
             do {
                 // nur quadratische graphen
-                y = railCurveGradient * Math.pow(x, 2) + railCurveYAxis;
+                y = a * Math.pow(x, 2) + b * x + c;
                 points.add(new Point2D.Double(x, y));
                 x++;
             } while (y > 0);
-
-        } else {
-
-            points.add(new Point2D.Double(linearGraphX, throwPOJO.getHeight()));
-            points.add(new Point2D.Double(linearGraphX, 0));
         }
-
         return points;
     }
 }

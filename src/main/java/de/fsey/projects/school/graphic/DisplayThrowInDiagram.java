@@ -5,19 +5,11 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class DisplayThrowInDiagram extends JPanel {
 
     private List<Point2D.Double> pointsOfGraph;
-
-    int[] coordinates={100,20};
-
-    Point2D.Double point = new Point2D.Double(1,2);
-
-
 
 
     @Override
@@ -37,13 +29,16 @@ public class DisplayThrowInDiagram extends JPanel {
         //x Axis
         g1.draw(new Line2D.Double(25,height-25,width-25,height-25));
 
+        //pointsOfGraph.forEach(System.out::println);
 
+        //draw points
         for (Point2D.Double point : pointsOfGraph) {
 
             double x = 25 + point.getX(); // start at the axis and not directly at window start
             double y = (height -25) - point.getY(); // start from x axis below (height -25) and then subtract point
 
             g1.fill(new Ellipse2D.Double(x,y,2,2));
+            //TODO: extend diagram
         }
 
     }
@@ -69,7 +64,6 @@ public class DisplayThrowInDiagram extends JPanel {
     public List<Point2D.Double> getPointsOfGraph() {
         return pointsOfGraph;
     }
-
     public void setPointsOfGraph(List<Point2D.Double> pointsOfGraph) {
         this.pointsOfGraph = pointsOfGraph;
     }
