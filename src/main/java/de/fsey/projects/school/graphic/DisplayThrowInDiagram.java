@@ -9,6 +9,9 @@ import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 import java.util.List;
 
+/**
+ * Class is used to create a diagram from all before calculated parameters.
+ */
 public class DisplayThrowInDiagram extends JPanel {
 
     private List<Point2D.Double> pointsOfGraph;
@@ -18,6 +21,12 @@ public class DisplayThrowInDiagram extends JPanel {
     }
 
 
+    /**
+     * Method creates the diagram to show the curve of a physical throw.
+     * Draws x-, y-Axis, and their labels and points of the graph.
+     * Also a short description of calculated parameters about the throw.
+     * @param g responsible to paint the coordinate system, graph, etc.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -44,9 +53,9 @@ public class DisplayThrowInDiagram extends JPanel {
             g1.drawString(String.valueOf(i - 25), i -3, height-10);
         }
 
-
+        //description
         g1.setColor(Color.GRAY);
-        if (throwPOJO.getEquationPartsABC()[0] == 0) {
+        if (throwPOJO.getEquationPartsABC()[0] == 0 && !throwPOJO.isThrowIsVertical()) {
             g1.drawString("Calculated data:" + " Time: " + df.format(throwPOJO.getTimeOfThrow()) + " Distance: " + df.format(throwPOJO.getDistanceOfThrow()) +
                             " Throw Equation: " + df.format(throwPOJO.getEquationPartsABC()[1]) + " x + " + df.format(throwPOJO.getEquationPartsABC()[2]),
                     20, 20);
@@ -55,12 +64,14 @@ public class DisplayThrowInDiagram extends JPanel {
             g1.drawString("Calculated data:" + " Time: " + df.format(throwPOJO.getTimeOfThrow()) + " Distance: " + df.format(throwPOJO.getDistanceOfThrow()) +
                             " Throw Equation: " + df.format(throwPOJO.getEquationPartsABC()[0]) + " x^2 + " + df.format(throwPOJO.getEquationPartsABC()[1]) + " x + " + df.format(throwPOJO.getEquationPartsABC()[2]),
                     20, 20);
+        }else if(throwPOJO.isThrowIsVertical()){
+            g1.drawString("Calculated data:" + " Time: " + df.format(throwPOJO.getTimeOfThrow()) + " Vertical Distance: " + df.format(throwPOJO.getDistanceOfThrow()),
+                    20, 20);
         }
 
-        //pointsOfGraph.forEach(System.out::println);
 
+        //draw graph
         g1.setColor(Color.BLUE);
-        //draw points
         for (int i = 0; i < pointsOfGraph.size(); i++) {
 
             double x = 25 + pointsOfGraph.get(i).getX(); // start at the axis and not directly at window start
@@ -72,7 +83,11 @@ public class DisplayThrowInDiagram extends JPanel {
     }
 
 
-
+    /**
+     * Function sets up the JFrame in which the diagram is rendered.
+     * @param pointsOfGraph
+     * @param throwPOJO
+     */
     public void createAndShowGui(List<Point2D.Double> pointsOfGraph, ThrowPOJO throwPOJO){
 
         DisplayThrowInDiagram displayThrowInDiagram = new DisplayThrowInDiagram();

@@ -1,6 +1,7 @@
 package de.fsey.projects.school.calc;
 
 import de.fsey.projects.school.pojo.ThrowPOJO;
+
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class Calculations {
                 if (throwPOJO.getAngleInDegrees() > 360)
                     while (throwPOJO.getAngleInDegrees() > 360)
                         throwPOJO.setAngleInDegrees(throwPOJO.getAngleInDegrees() - 360);
-               throwPOJO = ObliqueThrowCalculations(throwPOJO);
+                throwPOJO = ObliqueThrowCalculations(throwPOJO);
             }
         }
 
@@ -57,6 +58,7 @@ public class Calculations {
         throwPOJO.setTimeOfThrow(timeOfThrow);
         throwPOJO.setDistanceOfThrow(distanceOfThrow);
         throwPOJO.setEquationPartsABC(new double[]{railCurveEquationA, 0.0, railCurveEquationC});
+        throwPOJO.setThrowIsVertical(false);
 
         return throwPOJO;
 
@@ -79,6 +81,7 @@ public class Calculations {
         throwPOJO.setTimeOfThrow(timeOfThrow);
         throwPOJO.setDistanceOfThrow(distanceOfThrow);
         throwPOJO.setEquationPartsABC(new double[]{railCurveEquationA, railCurveEquationB, railCurveEquationC});
+        throwPOJO.setThrowIsVertical(false);
 
         System.out.println(throwPOJO.toString());
         return throwPOJO;
@@ -88,38 +91,43 @@ public class Calculations {
     public ThrowPOJO verticalThrowCalculations(ThrowPOJO throwPOJO) {
         System.out.println("vertical");
         //TODO: program behavior here
-//        double timeOfThrow = 0;
-//        double distanceOfThrow = 0;
-//        double railCurveX = 0;
-//
-//        //freier fall
-//        if (throwPOJO.getStartVelocity() == 0) {
-//            timeOfThrow = Math.sqrt((2 * throwPOJO.getStartVelocity()) / GRAVITY_CONSTANT);
-//            distanceOfThrow = 0.5 * GRAVITY_CONSTANT * Math.pow(timeOfThrow, 2) + throwPOJO.getStartVelocity();
-//            railCurveX = distanceOfThrow;
-//
-//
-//        }
-//        //wurf nach oben
-//        else if (throwPOJO.getStartVelocity() > 0 && throwPOJO.getAngleInDegrees() == 90) {
-//            timeOfThrow =  2* ( throwPOJO.getStartVelocity() / GRAVITY_CONSTANT);
-//
-//
-//        }
-//        //wurf nach unten
-//        else if (throwPOJO.getStartVelocity() > 0 && throwPOJO.getAngleInDegrees() == 270) {
-//
-//        }
-//
-//        throwPOJO.setTimeOfThrow(timeOfThrow);
-//        throwPOJO.setDistanceOfThrow(distanceOfThrow);
-//        throwPOJO.setLinearGraphOfForVerticalThrowsX(railCurveX);
-//        throwPOJO.setQuadraticThrowEquations(null);
-//
-//
+        double timeOfThrow = 0;
+        //distance here means the elevation gained in a throw upwards. is 0 if free fall or throw upside down
+        double distanceOfThrow = 0;
+
+        //freier fall
+        if (throwPOJO.getStartVelocity() == 0) {
+            timeOfThrow = Math.sqrt((2 * throwPOJO.getHeight()) / GRAVITY_CONSTANT);
+            distanceOfThrow = 0;
+
+
+        }
+        //wurf nach oben
+        else if (throwPOJO.getStartVelocity() > 0 && throwPOJO.getAngleInDegrees() == 90) {
+
+            double timeUp = throwPOJO.getStartVelocity() / GRAVITY_CONSTANT;
+            distanceOfThrow = (Math.pow(throwPOJO.getStartVelocity(), 2)) / ( 2 * GRAVITY_CONSTANT );
+            timeOfThrow = timeUp + ( Math.sqrt(2 * (throwPOJO.getHeight() + distanceOfThrow) / GRAVITY_CONSTANT));
+
+
+
+        }
+        //wurf nach unten
+        else if (throwPOJO.getStartVelocity() > 0 && throwPOJO.getAngleInDegrees() == 270) {
+            distanceOfThrow = 0;
+            timeOfThrow = ( -throwPOJO.getStartVelocity() + (Math.sqrt( (Math.pow(throwPOJO.getStartVelocity(), 2)) + 2 * GRAVITY_CONSTANT * throwPOJO.getHeight() )))  / GRAVITY_CONSTANT;
+
+        }
+
+
+        throwPOJO.setTimeOfThrow(timeOfThrow);
+        throwPOJO.setDistanceOfThrow(distanceOfThrow);
+        throwPOJO.setEquationPartsABC(new double[]{0, 0, 0});
+        throwPOJO.setThrowIsVertical(true);
+
         return throwPOJO;
-//
-//
+
+
     }
 
 
@@ -134,7 +142,7 @@ public class Calculations {
         double x = 0;
         double y;
 
-        if (throwPOJO.getEquationPartsABC() != null) {
+        if (throwPOJO.getEquationPartsABC() != null && !throwPOJO.isThrowIsVertical()) {
             double a = throwPOJO.getEquationPartsABC()[0];
             double b = throwPOJO.getEquationPartsABC()[1];
             double c = throwPOJO.getEquationPartsABC()[2];
@@ -145,7 +153,39 @@ public class Calculations {
                 points.add(new Point2D.Double(x, y));
                 x++;
             } while (y > 0);
+        } else if (throwPOJO.isThrowIsVertical()) {
+            return getPointsOfGraphIfVerticalThrow(throwPOJO);
+        }
+
+        return points;
+    }
+
+    public List<Point2D.Double> getPointsOfGraphIfVerticalThrow(ThrowPOJO throwPOJO) {
+        List<Point2D.Double> points = new ArrayList<>();
+
+        double highestPoint = throwPOJO.getHeight() + throwPOJO.getDistanceOfThrow();
+        double startPoint = throwPOJO.getHeight();
+
+        if (startPoint == highestPoint) {
+            for (double i = startPoint; i >= 0; i--) {
+                points.add(new Point2D.Double(1, i));
+            }
+        } else if (startPoint != highestPoint) {
+            double increment = startPoint;
+
+            highestPoint = Math.ceil(highestPoint);
+            while (increment < highestPoint) {
+                increment++;
+                points.add(new Point2D.Double(1, increment));
+            }
+            if (increment == highestPoint) {
+                while (increment >= 0) {
+                    points.add(new Point2D.Double(1, increment));
+                    increment--;
+                }
+            }
         }
         return points;
     }
+
 }
