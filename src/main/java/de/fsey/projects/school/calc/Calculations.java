@@ -106,16 +106,15 @@ public class Calculations {
         else if (throwPOJO.getStartVelocity() > 0 && throwPOJO.getAngleInDegrees() == 90) {
 
             double timeUp = throwPOJO.getStartVelocity() / GRAVITY_CONSTANT;
-            distanceOfThrow = (Math.pow(throwPOJO.getStartVelocity(), 2)) / ( 2 * GRAVITY_CONSTANT );
-            timeOfThrow = timeUp + ( Math.sqrt(2 * (throwPOJO.getHeight() + distanceOfThrow) / GRAVITY_CONSTANT));
-
+            distanceOfThrow = (Math.pow(throwPOJO.getStartVelocity(), 2)) / (2 * GRAVITY_CONSTANT);
+            timeOfThrow = timeUp + (Math.sqrt(2 * (throwPOJO.getHeight() + distanceOfThrow) / GRAVITY_CONSTANT));
 
 
         }
         //wurf nach unten
         else if (throwPOJO.getStartVelocity() > 0 && throwPOJO.getAngleInDegrees() == 270) {
             distanceOfThrow = 0;
-            timeOfThrow = ( -throwPOJO.getStartVelocity() + (Math.sqrt( (Math.pow(throwPOJO.getStartVelocity(), 2)) + 2 * GRAVITY_CONSTANT * throwPOJO.getHeight() )))  / GRAVITY_CONSTANT;
+            timeOfThrow = (-throwPOJO.getStartVelocity() + (Math.sqrt((Math.pow(throwPOJO.getStartVelocity(), 2)) + 2 * GRAVITY_CONSTANT * throwPOJO.getHeight()))) / GRAVITY_CONSTANT;
 
         }
 
@@ -128,6 +127,49 @@ public class Calculations {
         return throwPOJO;
 
 
+    }
+
+    public ThrowPOJO calcAirFriction(ThrowPOJO throwPOJO) {
+
+        //calculate the velocity for x and y and get a total value from both
+        List<Double> totalVelocities = new ArrayList<>();
+        double Vx = throwPOJO.getStartVelocity() * Math.cos(Math.toRadians(throwPOJO.getAngleInDegrees()));
+
+        for (double i = 0; i < throwPOJO.getTimeOfThrow(); i = i + 0.25) {
+            double Vy = - (GRAVITY_CONSTANT * i )  + ( throwPOJO.getStartVelocity() * Math.sin(Math.toRadians(throwPOJO.getAngleInDegrees())) );
+            double totalVelocity = Math.sqrt( Math.pow(Vx, 2 ) + Math.pow(Vy, 2));
+            totalVelocities.add(totalVelocity);
+        }
+
+
+
+        // golf ball
+        double mass = 0.040; // kg
+        double forceInNewton = mass * GRAVITY_CONSTANT;
+        double radiusCM = 2; // cm
+        double surfaceOfBallInMeters = (Math.pow(radiusCM, 2) * Math.PI) / 100; //cm^2
+        double airFlowResistance = 0.45;  // Cw
+        double density = 1.225; // kg / m^3
+
+
+        //calculate the air friction with the values of the total velocity
+        double airFrictionInNewton = 0;
+        for (int i = 0; i < totalVelocities.size(); i++){
+            airFrictionInNewton = 0.5 * surfaceOfBallInMeters * airFlowResistance * density * Math.pow(totalVelocities.get(i), 2);
+            System.out.println(airFrictionInNewton);
+            //TODO: save air friction values into list and do sth. with it
+        }
+
+
+        System.out.println("Surface: " + surfaceOfBallInMeters);
+        System.out.println("Force in Newton: " + forceInNewton);
+        System.out.println("Air friction: " + airFrictionInNewton);
+
+
+
+        // GOAL: get new (only one) value for g, then calculate the throw again to get a throw with air friction
+        // F = m x g => g = F /m
+        return throwPOJO;
     }
 
 
@@ -151,7 +193,7 @@ public class Calculations {
                 // nur quadratische graphen
                 y = a * Math.pow(x, 2) + b * x + c;
                 points.add(new Point2D.Double(x, y));
-                x++;
+                x = x + 0.25;
             } while (y > 0);
         } else if (throwPOJO.isThrowIsVertical()) {
             return getPointsOfGraphIfVerticalThrow(throwPOJO);

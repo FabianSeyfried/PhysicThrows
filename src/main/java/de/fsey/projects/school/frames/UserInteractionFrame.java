@@ -62,6 +62,8 @@ public class UserInteractionFrame {
             try {
                 throwPOJO = calc.determineTypeOfThrow(throwPOJO);
                 List<Point2D.Double> pointList = calc.getPointsOfGraph(throwPOJO);
+                throwPOJO.setPointsOfGraph(pointList);
+                throwPOJO = calc.calcAirFriction(throwPOJO);
 
 
 

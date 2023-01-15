@@ -1,7 +1,9 @@
 package de.fsey.projects.school.pojo;
 
+import java.awt.geom.Point2D;
 import java.util.AbstractMap;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * The params angleInDegrees, startVelocity, and height are pre-filled by the user.
@@ -20,10 +22,12 @@ public class ThrowPOJO {
     private double distanceOfThrow;
     private boolean throwIsVertical;
 
+    List<Point2D.Double> pointsOfGraph;
+
     public ThrowPOJO() {
     }
 
-    public ThrowPOJO(double angleInDegrees, double startVelocity, double height, double[] equationPartsABC, double timeOfThrow, double distanceOfThrow, boolean throwIsVertical) {
+    public ThrowPOJO(double angleInDegrees, double startVelocity, double height, double[] equationPartsABC, double timeOfThrow, double distanceOfThrow, boolean throwIsVertical, List<Point2D.Double> pointsOfGraph) {
         this.angleInDegrees = angleInDegrees;
         this.startVelocity = startVelocity;
         this.height = height;
@@ -31,6 +35,7 @@ public class ThrowPOJO {
         this.timeOfThrow = timeOfThrow;
         this.distanceOfThrow = distanceOfThrow;
         this.throwIsVertical = throwIsVertical;
+        this.pointsOfGraph = pointsOfGraph;
     }
 
     public ThrowPOJO(double angleInDegrees, double startVelocity, double height) {
@@ -88,6 +93,14 @@ public class ThrowPOJO {
 
     public void setThrowIsVertical(boolean throwIsVertical) {
         this.throwIsVertical = throwIsVertical;
+    }
+
+    public List<Point2D.Double> getPointsOfGraph() {
+        return pointsOfGraph;
+    }
+
+    public void setPointsOfGraph(List<Point2D.Double> pointsOfGraph) {
+        this.pointsOfGraph = pointsOfGraph;
     }
 
     @Override
