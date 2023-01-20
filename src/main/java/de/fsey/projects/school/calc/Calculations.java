@@ -131,44 +131,65 @@ public class Calculations {
 
     public ThrowPOJO calcAirFriction(ThrowPOJO throwPOJO) {
 
-        //calculate the velocity for x and y and get a total value from both
-        List<Double> totalVelocities = new ArrayList<>();
-        double Vx = throwPOJO.getStartVelocity() * Math.cos(Math.toRadians(throwPOJO.getAngleInDegrees()));
+        //methode der kleinen schritte
 
-        for (double i = 0; i < throwPOJO.getTimeOfThrow(); i = i + 0.25) {
-            double Vy = - (GRAVITY_CONSTANT * i )  + ( throwPOJO.getStartVelocity() * Math.sin(Math.toRadians(throwPOJO.getAngleInDegrees())) );
-            double totalVelocity = Math.sqrt( Math.pow(Vx, 2 ) + Math.pow(Vy, 2));
-            totalVelocities.add(totalVelocity);
+        double angleInDegrees = throwPOJO.getAngleInDegrees();
+        double currentHeight = throwPOJO.getHeight();
+
+
+
+
+        double startVelocity = throwPOJO.getStartVelocity();
+
+        double vX0 = startVelocity * Math.cos(Math.toRadians(angleInDegrees));
+        double vY0 = startVelocity * Math.sin(Math.toRadians(angleInDegrees));
+
+
+
+
+        //TODO: determine aAir: 0 is placeholder !!
+        double aAirY = GRAVITY_CONSTANT + (0);
+        double aAirX = (0);
+
+
+
+        List<Point2D.Double> pointsOfGraphWithAirFriction = new ArrayList<>();
+
+
+        for (int steps = 0; currentHeight > 0; steps++) {
+
+
+            double deltaT = (steps * 0.25);
+
+            double vX = vX0  + ( aAirX * deltaT );
+            double vY = vY0 +  ( aAirY * deltaT );
+
+            //aus vx und vy und dem delta t die genaue position im koosy berechnen
+            // sX = vX * t
+            double distance = vX * deltaT;
+            // ges: h = (vY^2)  / (2 * g)
+
+            currentHeight = Math.pow(vY,2) / (2*GRAVITY_CONSTANT);
+
+            Point2D.Double point = new Point2D.Double(distance, currentHeight);
+            pointsOfGraphWithAirFriction.add(point);
+
+            // => sX == distanz in m
+            // h aus vY == höhe in m
+            //in punkt einsetzen
+
+
+
+
+
+
+
         }
 
 
 
-        // golf ball
-        double mass = 0.040; // kg
-        double forceInNewton = mass * GRAVITY_CONSTANT;
-        double radiusCM = 2; // cm
-        double surfaceOfBallInMeters = (Math.pow(radiusCM, 2) * Math.PI) / 100; //cm^2
-        double airFlowResistance = 0.45;  // Cw
-        double density = 1.225; // kg / m^3
 
-
-        //calculate the air friction with the values of the total velocity
-        double airFrictionInNewton = 0;
-        for (int i = 0; i < totalVelocities.size(); i++){
-            airFrictionInNewton = 0.5 * surfaceOfBallInMeters * airFlowResistance * density * Math.pow(totalVelocities.get(i), 2);
-            System.out.println(airFrictionInNewton);
-            //TODO: save air friction values into list and do sth. with it
-        }
-
-
-        System.out.println("Surface: " + surfaceOfBallInMeters);
-        System.out.println("Force in Newton: " + forceInNewton);
-        System.out.println("Air friction: " + airFrictionInNewton);
-
-
-
-        // GOAL: get new (only one) value for g, then calculate the throw again to get a throw with air friction
-        // F = m x g => g = F /m
+        // set new values
         return throwPOJO;
     }
 
