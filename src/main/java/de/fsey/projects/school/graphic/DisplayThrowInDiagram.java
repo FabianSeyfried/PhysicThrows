@@ -15,6 +15,7 @@ import java.util.List;
 public class DisplayThrowInDiagram extends JPanel {
 
     private List<Point2D.Double> pointsOfGraph;
+    private List<Point2D.Double> pointsOfGraphWithAirFriction;
     private ThrowPOJO throwPOJO;
 
     public DisplayThrowInDiagram() {
@@ -80,6 +81,16 @@ public class DisplayThrowInDiagram extends JPanel {
             g1.fill(new Ellipse2D.Double(x,y,2,2));
         }
 
+
+        g1.setColor(Color.RED);
+        for (int j = 0; j < pointsOfGraphWithAirFriction.size(); j++) {
+
+            double x = 25 + pointsOfGraphWithAirFriction.get(j).getX(); // start at the axis and not directly at window start
+            double y = (height -25) - pointsOfGraphWithAirFriction.get(j).getY(); // start from x axis below (height -25) and then subtract point
+
+            g1.fill(new Ellipse2D.Double(x,y,2,2));
+        }
+
     }
 
 
@@ -88,10 +99,11 @@ public class DisplayThrowInDiagram extends JPanel {
      * @param pointsOfGraph
      * @param throwPOJO
      */
-    public void createAndShowGui(List<Point2D.Double> pointsOfGraph, ThrowPOJO throwPOJO){
+    public void createAndShowGui(List<Point2D.Double> pointsOfGraph, ThrowPOJO throwPOJO, List<Point2D.Double> pointsOfGraphWithAirFriction){
 
         DisplayThrowInDiagram displayThrowInDiagram = new DisplayThrowInDiagram();
         displayThrowInDiagram.setPointsOfGraph(pointsOfGraph);
+        displayThrowInDiagram.setPointsOfGraphWithAirFriction(pointsOfGraphWithAirFriction);
         displayThrowInDiagram.setThrowPOJO(throwPOJO);
 
         displayThrowInDiagram.setPreferredSize(new Dimension(400, 300));
@@ -117,5 +129,12 @@ public class DisplayThrowInDiagram extends JPanel {
     }
     public void setThrowPOJO(ThrowPOJO throwPOJO) {
         this.throwPOJO = throwPOJO;
+    }
+
+    public List<Point2D.Double> getPointsOfGraphWithAirFriction() {
+        return pointsOfGraphWithAirFriction;
+    }
+    public void setPointsOfGraphWithAirFriction(List<Point2D.Double> pointsOfGraphWithAirFriction) {
+        this.pointsOfGraphWithAirFriction = pointsOfGraphWithAirFriction;
     }
 }

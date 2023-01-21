@@ -68,7 +68,7 @@ public class UserInteractionFrame {
 
 
                 displayThrowInDiagram = new DisplayThrowInDiagram();
-                displayThrowInDiagram.createAndShowGui(pointList, throwPOJO);
+                displayThrowInDiagram.createAndShowGui(pointList, throwPOJO, throwPOJO.getPointsOfGraphWithAirFriction());
 
 
             }catch (NumberFormatException exception){

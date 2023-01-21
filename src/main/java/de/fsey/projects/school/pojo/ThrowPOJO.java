@@ -23,11 +23,12 @@ public class ThrowPOJO {
     private boolean throwIsVertical;
 
     List<Point2D.Double> pointsOfGraph;
+    List<Point2D.Double> pointsOfGraphWithAirFriction;
 
     public ThrowPOJO() {
     }
 
-    public ThrowPOJO(double angleInDegrees, double startVelocity, double height, double[] equationPartsABC, double timeOfThrow, double distanceOfThrow, boolean throwIsVertical, List<Point2D.Double> pointsOfGraph) {
+    public ThrowPOJO(double angleInDegrees, double startVelocity, double height, double[] equationPartsABC, double timeOfThrow, double distanceOfThrow, boolean throwIsVertical, List<Point2D.Double> pointsOfGraph, List<Point2D.Double> pointsOfGraphWithAirFriction) {
         this.angleInDegrees = angleInDegrees;
         this.startVelocity = startVelocity;
         this.height = height;
@@ -36,6 +37,7 @@ public class ThrowPOJO {
         this.distanceOfThrow = distanceOfThrow;
         this.throwIsVertical = throwIsVertical;
         this.pointsOfGraph = pointsOfGraph;
+        this.pointsOfGraphWithAirFriction = pointsOfGraphWithAirFriction;
     }
 
     public ThrowPOJO(double angleInDegrees, double startVelocity, double height) {
@@ -101,6 +103,14 @@ public class ThrowPOJO {
 
     public void setPointsOfGraph(List<Point2D.Double> pointsOfGraph) {
         this.pointsOfGraph = pointsOfGraph;
+    }
+
+    public List<Point2D.Double> getPointsOfGraphWithAirFriction() {
+        return pointsOfGraphWithAirFriction;
+    }
+
+    public void setPointsOfGraphWithAirFriction(List<Point2D.Double> pointsOfGraphWithAirFriction) {
+        this.pointsOfGraphWithAirFriction = pointsOfGraphWithAirFriction;
     }
 
     @Override

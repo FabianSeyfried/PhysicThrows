@@ -135,22 +135,16 @@ public class Calculations {
 
         double angleInDegrees = throwPOJO.getAngleInDegrees();
         double currentHeight = throwPOJO.getHeight();
-
-
-
-
         double startVelocity = throwPOJO.getStartVelocity();
+
 
         double vX0 = startVelocity * Math.cos(Math.toRadians(angleInDegrees));
         double vY0 = startVelocity * Math.sin(Math.toRadians(angleInDegrees));
 
 
-
-
         //TODO: determine aAir: 0 is placeholder !!
         double aAirY = GRAVITY_CONSTANT + (0);
         double aAirX = (0);
-
 
 
         List<Point2D.Double> pointsOfGraphWithAirFriction = new ArrayList<>();
@@ -174,21 +168,12 @@ public class Calculations {
             Point2D.Double point = new Point2D.Double(distance, currentHeight);
             pointsOfGraphWithAirFriction.add(point);
 
-            // => sX == distanz in m
-            // h aus vY == höhe in m
-            //in punkt einsetzen
-
-
-
-
-
-
+            //TODO: remove after real acceleration !!
+            if (steps == 40) break;
 
         }
 
-
-
-
+        throwPOJO.setPointsOfGraphWithAirFriction(pointsOfGraphWithAirFriction);
         // set new values
         return throwPOJO;
     }
