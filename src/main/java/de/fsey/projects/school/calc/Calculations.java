@@ -142,34 +142,40 @@ public class Calculations {
         double vY0 = startVelocity * Math.sin(Math.toRadians(angleInDegrees));
 
 
-        //TODO: determine aAir: 0 is placeholder !!
-        double aAirY = GRAVITY_CONSTANT + (0);
-        double aAirX = (0);
-
 
         List<Point2D.Double> pointsOfGraphWithAirFriction = new ArrayList<>();
+        pointsOfGraphWithAirFriction.add(new Point2D.Double(0, currentHeight));
+
+        double vX = vX0;
+        double vY = vY0;
+
+        for (int steps = 1; currentHeight > 0; steps++) {
 
 
-        for (int steps = 0; currentHeight > 0; steps++) {
+            double k = 0.01;
+            //TODO: determine aAir: 0 is placeholder !!
+            double aAirY = - GRAVITY_CONSTANT + (k * Math.pow(vY, 2));
+            double aAirX = - k * Math.pow(vX,2);
 
 
             double deltaT = (steps * 0.25);
 
-            double vX = vX0  + ( aAirX * deltaT );
-            double vY = vY0 +  ( aAirY * deltaT );
+             vX = vX0  + ( aAirX * deltaT );
+             vY = vY0 +  ( aAirY * deltaT );
 
             //aus vx und vy und dem delta t die genaue position im koosy berechnen
             // sX = vX * t
             double distance = vX * deltaT;
             // ges: h = (vY^2)  / (2 * g)
 
-            currentHeight = Math.pow(vY,2) / (2*GRAVITY_CONSTANT);
+            if (vY > 0) currentHeight = currentHeight + ( Math.pow(vY,2) / (2*GRAVITY_CONSTANT) );
+            if (vY < 0) currentHeight = currentHeight - ( Math.pow(vY,2) / (2*GRAVITY_CONSTANT) );
 
             Point2D.Double point = new Point2D.Double(distance, currentHeight);
             pointsOfGraphWithAirFriction.add(point);
 
             //TODO: remove after real acceleration !!
-            if (steps == 40) break;
+            if (currentHeight <= 0) break;
 
         }
 
