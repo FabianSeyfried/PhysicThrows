@@ -149,11 +149,12 @@ public class Calculations {
         double vX = vX0;
         double vY = vY0;
 
-        for (int steps = 1; currentHeight > 0; steps++) {
+        int steps = 0;
+        while (currentHeight > 0) {
 
 
+            //Ergebnisse bleiben gleich bei total unterschiedlichen k's !
             double k = 0.01;
-            //TODO: determine aAir: 0 is placeholder !!
             double aAirY = - GRAVITY_CONSTANT + (k * Math.pow(vY, 2));
             double aAirX = - k * Math.pow(vX,2);
 
@@ -163,19 +164,14 @@ public class Calculations {
              vX = vX0  + ( aAirX * deltaT );
              vY = vY0 +  ( aAirY * deltaT );
 
-            //aus vx und vy und dem delta t die genaue position im koosy berechnen
-            // sX = vX * t
-            double distance = vX * deltaT;
-            // ges: h = (vY^2)  / (2 * g)
+             double distance = vX * deltaT;
 
-            if (vY > 0) currentHeight = currentHeight + ( Math.pow(vY,2) / (2*GRAVITY_CONSTANT) );
-            if (vY < 0) currentHeight = currentHeight - ( Math.pow(vY,2) / (2*GRAVITY_CONSTANT) );
+            currentHeight = currentHeight + (vY * deltaT);
 
             Point2D.Double point = new Point2D.Double(distance, currentHeight);
             pointsOfGraphWithAirFriction.add(point);
+            steps++;
 
-            //TODO: remove after real acceleration !!
-            if (currentHeight <= 0) break;
 
         }
 
