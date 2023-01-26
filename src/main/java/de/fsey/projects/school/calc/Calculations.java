@@ -148,28 +148,24 @@ public class Calculations {
         double vX = vX0;
         double vY = vY0;
 
-        int steps = 0;
+        double timeInSec = 0.05;
         while (currentHeight > 0) {
 
 
             //Ergebnisse bleiben gleich bei total unterschiedlichen k's !
-            double k = 0.01;
-            double aAirY = - GRAVITY_CONSTANT + (k * Math.pow(vY, 2));
-            double aAirX = - k * Math.pow(vX,2);
+            double k = 0.1;
 
+            vX = vX0 + (GRAVITY_CONSTANT * timeInSec);
+            vY = vY0 - k * Math.pow(vY, 2) * timeInSec - GRAVITY_CONSTANT * timeInSec;
 
-            double deltaT = (steps * 0.25);
-
-             vX = vX0  + ( aAirX * deltaT );
-             vY = vY0 +  ( aAirY * deltaT );
-
-             double distance = vX * deltaT;
-
-            currentHeight = currentHeight + (vY * deltaT);
+            double distance = (vX * timeInSec) + 0.5 * GRAVITY_CONSTANT * Math.pow(timeInSec, 2);
+            double y = ( vY * timeInSec - 0.5 * k * Math.pow(vY, 2) * timeInSec - 0.5 * GRAVITY_CONSTANT * timeInSec * timeInSec);
+            System.out.println( y);
+            currentHeight = currentHeight + y ;
 
             Point2D.Double point = new Point2D.Double(distance, currentHeight);
             pointsOfGraphWithAirFriction.add(point);
-            steps++;
+            timeInSec +=  0.05;
 
 
         }
