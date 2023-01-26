@@ -144,7 +144,6 @@ public class Calculations {
 
 
         List<Point2D.Double> pointsOfGraphWithAirFriction = new ArrayList<>();
-        pointsOfGraphWithAirFriction.add(new Point2D.Double(0, currentHeight));
 
         double vX = vX0;
         double vY = vY0;
