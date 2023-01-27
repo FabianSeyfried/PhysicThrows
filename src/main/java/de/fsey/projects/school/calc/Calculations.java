@@ -149,18 +149,26 @@ public class Calculations {
         double vY = vY0;
 
         double timeInSec = 0.05;
+        double distance =0;
         while (currentHeight > 0) {
 
 
-            //Ergebnisse bleiben gleich bei total unterschiedlichen k's !
+            // TODO: find error why graph for high angle is wrong
+            // TODO: remove scale of axis and print distances or fix axis
             double k = 0.1;
 
+            //Vx = Vx + a * t (horizontale Geschwindigkeit)
             vX = vX0 + (GRAVITY_CONSTANT * timeInSec);
-            vY = vY0 - k * Math.pow(vY, 2) * timeInSec - GRAVITY_CONSTANT * timeInSec;
 
-            double distance = (vX * timeInSec) + 0.5 * GRAVITY_CONSTANT * Math.pow(timeInSec, 2);
-            double y = ( vY * timeInSec - 0.5 * k * Math.pow(vY, 2) * timeInSec - 0.5 * GRAVITY_CONSTANT * timeInSec * timeInSec);
-            System.out.println( y);
+            // Vy = Vy - k * Vy^2 * t - a * t (vertikale Geschwindigkeit)
+            vY = vY0 - (k * Math.pow(vY, 2) * timeInSec) - GRAVITY_CONSTANT * timeInSec;
+
+            // x = Vx * t + 1/2 * a * t^2 (horizontale Bewegung)
+            distance = (vX * timeInSec) + 0.5 * GRAVITY_CONSTANT * Math.pow(timeInSec, 2);
+
+            // y = Vy * t - 1/2 * k * Vy^2 * t - 1/2 * a * t^2 (vertikale Bewegung)
+            double y = ( ( vY * timeInSec ) - (0.5 * k * Math.pow(vY, 2) * timeInSec) - (0.5 * GRAVITY_CONSTANT * Math.pow(timeInSec,2)));
+
             currentHeight = currentHeight + y ;
 
             Point2D.Double point = new Point2D.Double(distance, currentHeight);
@@ -170,8 +178,11 @@ public class Calculations {
 
         }
 
+        System.out.println(pointsOfGraphWithAirFriction.get(pointsOfGraphWithAirFriction.size() -1 ));
+        System.out.println(pointsOfGraphWithAirFriction.get(pointsOfGraphWithAirFriction.size() -2 ));
+
+
         throwPOJO.setPointsOfGraphWithAirFriction(pointsOfGraphWithAirFriction);
-        // set new values
         return throwPOJO;
     }
 
