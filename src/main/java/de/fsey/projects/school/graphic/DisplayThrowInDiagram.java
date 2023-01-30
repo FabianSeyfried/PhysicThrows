@@ -49,10 +49,15 @@ public class DisplayThrowInDiagram extends JPanel {
             g1.drawString(String.valueOf(i - 25), 5, height - i +3);
         }
 
-        //label for x-axis (
-        for (int i = 25; i < width-25; i = i + 50) {
-            g1.drawString(String.valueOf(i - 25), i -3, height-10);
-        }
+        //TODO REFACTOR CODE; replace air friction with airresistance
+        //TODO improve lastPointWithAirRes to closer value -> way too inaccurate
+        Point2D.Double lastPointWithAirRes = throwPOJO.getPointsOfGraphWithAirFriction().get(pointsOfGraphWithAirFriction.size() - 1);
+        double lastPoint = throwPOJO.getDistanceOfThrow();
+        g1.setColor(Color.RED);
+        g1.drawString((int) lastPointWithAirRes.x + "m", (int) lastPointWithAirRes.x, height - 10);
+        g1.setColor(Color.BLUE);
+        g1.drawString((int) lastPoint + "m", (int) lastPoint, height-2);
+        g1.setColor(Color.BLACK);
 
         //description
         g1.setColor(Color.GRAY);
