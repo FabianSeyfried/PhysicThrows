@@ -135,35 +135,52 @@ public class Calculations {
 
         double angleInDegrees = throwPOJO.getAngleInDegrees();
         double currentHeight = throwPOJO.getHeight();
-        double startVelocity = throwPOJO.getStartVelocity();
+        double v = throwPOJO.getStartVelocity();
 
 
-        double vX = startVelocity * Math.cos(Math.toRadians(angleInDegrees));
-        double vY = startVelocity * Math.sin(Math.toRadians(angleInDegrees));
+        double vX = v * Math.cos(Math.toRadians(angleInDegrees));
+        double vY = v * Math.sin(Math.toRadians(angleInDegrees));
 
 
 
         List<Point2D.Double> pointsOfGraphWithAirFriction = new ArrayList<>();
 
-        double timeInSec = 0.05;
-        double k = 0.5;
+        double time = 0;
         double x = 0;
+        double y = currentHeight;
 
-        while (currentHeight > 0) {
-
-            double aX = (- k * vX * startVelocity);
-            vX =  vX + ( aX * timeInSec );
-
-            double aY = - GRAVITY_CONSTANT - ( k * vY * startVelocity);
-            vY = vY + (aY * timeInSec);
-
-
-            x = x + vX * timeInSec;
+        /** change mass here to get different comparison values: for example to compare with
+         * https://phet.colorado.edu/sims/html/projectile-motion/latest/projectile-motion_de.html */
+        double mass = 17.0;
+        double C = 0.1;
+        double deltaT = 0.01;
 
 
-            double y = currentHeight;
-            y = y + vY * timeInSec;
-            currentHeight = y;
+        while (y >= 0) {
+
+           v = Math.sqrt( vX*vX + vY*vY);
+           double Fl = C * Math.pow(v,2);
+
+           double Flx = - vX * ( Fl / v );
+           double Fly = - vY * ( Fl / v );
+
+           double Fx = + Flx;
+           double Fy = - mass * GRAVITY_CONSTANT + Fly;
+
+           double aX = Fx / mass;
+           double aY = Fy / mass;
+
+           vX = vX + aX * deltaT;
+           vY = vY + aY * deltaT;
+
+           x = x + vX * deltaT;
+           y = y + vY * deltaT;
+           time = time + deltaT;
+
+
+
+
+
 
             Point2D.Double point = new Point2D.Double(x,y);
             pointsOfGraphWithAirFriction.add(point);
