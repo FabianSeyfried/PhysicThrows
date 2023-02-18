@@ -149,6 +149,7 @@ public class Calculations {
         double x = 0;
         double y = currentHeight;
 
+        //mass is pre-defined to work with the canon ball setting, normal values could be 1 kg or 5 to work the same as the pumpkin
         /** change mass here to get different comparison values: for example to compare with
          * https://phet.colorado.edu/sims/html/projectile-motion/latest/projectile-motion_de.html */
         double mass = 17.0;
@@ -159,16 +160,11 @@ public class Calculations {
         while (y >= 0) {
 
            v = Math.sqrt( vX*vX + vY*vY);
+
            double Fl = C * Math.pow(v,2);
 
-           double Flx = - vX * ( Fl / v );
-           double Fly = - vY * ( Fl / v );
-
-           double Fx = + Flx;
-           double Fy = - mass * GRAVITY_CONSTANT + Fly;
-
-           double aX = Fx / mass;
-           double aY = Fy / mass;
+           double aX =  (- vX * ( Fl / v )) / mass;
+           double aY = (- mass * GRAVITY_CONSTANT + (- vY * ( Fl / v ))) / mass;
 
            vX = vX + aX * deltaT;
            vY = vY + aY * deltaT;
